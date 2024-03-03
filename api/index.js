@@ -24,3 +24,15 @@ app.listen(3000, () => {
 
 app.use("/api/user", userRouter);
 app.use("/api/auth", authRouter);
+
+app.use((err, req, res, next) => {
+  //settind default values when values are not present
+  const statusCode = err.statusCode || 500;
+  const message = err.message || "Internal Server Error";
+  //bld structured resp load
+  res.status(statusCode).json({
+    status: false,
+    statusCode, //after ES6
+    message,
+  });
+});
