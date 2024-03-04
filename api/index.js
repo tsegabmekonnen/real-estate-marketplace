@@ -12,7 +12,7 @@ mongoose
     console.log("Connected to MongoDB!");
   })
   .catch((err) => {
-    console.log(err);
+    console.log(err.message);
   });
 
 const app = express();
@@ -26,7 +26,7 @@ app.use("/api/user", userRouter);
 app.use("/api/auth", authRouter);
 
 app.use((err, req, res, next) => {
-  //settind default values when values are not present
+  //setting default values when values are not present
   const statusCode = err.statusCode || 500;
   const message = err.message || "Internal Server Error";
   //bld structured resp load
