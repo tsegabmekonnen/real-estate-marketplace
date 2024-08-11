@@ -26,6 +26,7 @@ app.listen(3000, () => {
 app.use("/api/user", userRouter);
 app.use("/api/auth", authRouter);
 
+//Creating midleware for advanced error handling
 app.use((err, req, res, next) => {
   //setting default values when values are not present
   const statusCode = err.statusCode || 500;
