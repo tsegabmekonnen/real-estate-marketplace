@@ -12,7 +12,14 @@ export const signup = async (req, res, next) => {
     await newUser.save();
     res.status(201).json("user created successfully!");
   } catch (error) {
-    next(error);
+    //duplicate key error from Mongo
+    if (error.message.includes("E11000")) {
+      return next(
+        errorHandler(403, "User already exists with the same credential")
+      );
+    } else {
+      next(error);
+    }
   }
 };
 
