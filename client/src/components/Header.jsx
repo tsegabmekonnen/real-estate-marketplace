@@ -36,8 +36,8 @@ export default function Header() {
           <Link to="/profile">
             {currentUser ? (
               <img
-                className="rounded-ful h-7 w-7 object-cover"
-                src={currentUser.avator}
+                className="rounded-full h-7 w-7 object-cover self-center"
+                src={currentUser.avatar}
                 alt="profile"
               />
             ) : (
