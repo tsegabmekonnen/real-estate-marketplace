@@ -1,6 +1,7 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useRef, useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import {
   getDownloadURL,
   getStorage,
@@ -15,6 +16,9 @@ import {
   deleteUserStart,
   deleteUserSuccess,
   deleteUserFailure,
+  signOutStart,
+  signOutSuccess,
+  signOutFailure,
 } from "../redux/user/userSlice";
 
 export default function Profile() {
@@ -26,6 +30,7 @@ export default function Profile() {
   const [formData, setFormData] = useState({});
   const [updateSuccess, setUpdateSuccess] = useState(false);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (file) {
@@ -96,8 +101,25 @@ export default function Profile() {
         return;
       }
       dispatch(deleteUserSuccess(data));
-    } catch {
+    } catch (error) {
       dispatch(deleteUserFailure(error.message));
+    }
+  };
+
+  const handleSignOut = async () => {
+    dispatch(signOutStart());
+    try {
+      const res = await fetch("/api/auth/signout");
+      const data = await res.json();
+      if (data.success === false) {
+        dispatch(signOutFailure(data.message));
+        return;
+      }
+      dispatch(signOutSuccess());
+      navigate("/sign-in");
+    } catch (error) {
+      dispatch(signOutFailure(error.message));
+      return;
     }
   };
 
@@ -170,7 +192,9 @@ export default function Profile() {
         >
           Delete Account
         </button>
-        <button className="text-red-700 cursor-pointer">Sign Out</button>
+        <button onClick={handleSignOut} className="text-red-700 cursor-pointer">
+          Sign Out
+        </button>
       </div>
 
       <p className="text-red-700 mt-5">{error ? error : ""}</p>

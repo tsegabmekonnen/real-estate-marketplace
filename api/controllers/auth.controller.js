@@ -39,7 +39,20 @@ export const signin = async (req, res, next) => {
       .cookie("access_token", token, { httpOnly: true })
       .status(200)
       .json(userInfo);
+    console.log(`user ${userInfo?.username} successfully logged`);
   } catch (error) {
+    next(error);
+  }
+};
+
+export const signout = async (req, res, next) => {
+  const { email, password } = req.body;
+
+  try {
+    res.clearCookie("access_token");
+    res.status(200).json("User has been logged out");
+  } catch (error) {
+    console.log(`ERROR : error while signing out current user`);
     next(error);
   }
 };
